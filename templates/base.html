@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wikipedia Explorer</title>
-    <!-- Favicon Links -->
+    <!-- Favicon -->
     <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
-    {# Haddii aad isticmaalayso cabbirro badan oo PNG ah, ku dar kuwan sidoo kale: #}
-    {# <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}"> #}
-    {# <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}"> #}
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -51,7 +48,7 @@
             background-color: #0056b3;
             border-color: #0056b3;
         }
-        /* Styles for navbar alignment and language select width */
+        /* Navbar alignment and language select width adjustments */
         .navbar-nav {
             margin-right: auto;
         }
@@ -107,7 +104,7 @@
 
     <main class="container my-5">
         {% block content %}
-        <!-- Child templates will insert their content here -->
+        <!-- Content inserted by child templates -->
         {% endblock %}
     </main>
 
@@ -118,9 +115,10 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS Bundle with Popper -->
+    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // JavaScript function to handle language change
         function changeLanguage(langCode) {
             const currentUrl = new URL(window.location.href);
             currentUrl.searchParams.set('lang', langCode);

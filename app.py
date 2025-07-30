@@ -4,12 +4,12 @@ from flask import Flask, render_template, request, redirect, url_for
 import requests
 from urllib.parse import quote
 
-# Load environment variables
+# Load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
 
-# Dejinta luqadaha la taageerayo iyo luqadda asalka ah
+# Supported languages and default language for Wikipedia API
 SUPPORTED_LANGUAGES = {
     'en': 'English',
     'so': 'Somali',
@@ -19,34 +19,34 @@ SUPPORTED_LANGUAGES = {
     'de': 'Deutsch', # German
     'it': 'Italiano' # Italian
 }
-DEFAULT_LANGUAGE = 'en' # Luqadda asalka ah
+DEFAULT_LANGUAGE = 'en'
 
-# Function caawiya oo dhisaya base URL-ka Wikipedia API-ga luqadda
+# Helper function to construct Wikipedia RESTBase API URL for a given language
 def get_wikipedia_base_url(lang_code):
     if lang_code not in SUPPORTED_LANGUAGES:
-        lang_code = DEFAULT_LANGUAGE # Haddii luqadda aan la taageerin, ku laabo default
+        lang_code = DEFAULT_LANGUAGE
     return f"https://{lang_code}.wikipedia.org/api/rest_v1/page/"
 
-# Function caawiya oo dhisaya base URL-ka Wikipedia MediaWiki API-ga luqadda
+# Helper function to construct Wikipedia MediaWiki API URL for a given language
 def get_mediawiki_base_url(lang_code):
     if lang_code not in SUPPORTED_LANGUAGES:
         lang_code = DEFAULT_LANGUAGE
     return f"https://{lang_code}.wikipedia.org/w/api.php"
 
 
-# Route-ka ugu muhiimsan ee soo bandhigaya bogga random-ka ah ee Wikipedia
+# Home route: Displays a random Wikipedia page
 @app.route('/')
 def home():
-    # Soo qaado luqadda ka yimid URL-ka, haddii kale isticmaal default
+    # Get language from URL parameters, default to English
     lang = request.args.get('lang', DEFAULT_LANGUAGE)
     if lang not in SUPPORTED_LANGUAGES:
-        lang = DEFAULT_LANGUAGE # Hubi mar kale in luqadda la taageerayo
+        lang = DEFAULT_LANGUAGE
 
     wikipedia_api_url = get_wikipedia_base_url(lang) + "random/summary"
 
     try:
         response = requests.get(wikipedia_api_url)
-        response.raise_for_status()
+        response.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
         article_data = response.json()
 
         title = article_data.get('title', 'No Title Found')
@@ -55,36 +55,38 @@ def home():
 
         return render_template("index.html", 
                                random_article={'title': title, 'summary': summary, 'full_page_url': full_page_url},
-                               current_lang=lang, # Ku gudbi luqadda hadda jirta template-ka
-                               supported_languages=SUPPORTED_LANGUAGES) # Ku gudbi luqadaha la taageerayo
+                               current_lang=lang,
+                               supported_languages=SUPPORTED_LANGUAGES)
 
     except requests.exceptions.RequestException as e:
-        error_message = f"Cilad ka timid Wikipedia API: {e}"
+        # Handle API connection/response errors
+        error_message = f"Error fetching from Wikipedia API: {e}"
         print(error_message)
         return render_template("index.html", error=error_message, current_lang=lang, supported_languages=SUPPORTED_LANGUAGES)
     except Exception as e:
-        error_message = f"Cilad aan la filayn: {e}"
+        # Handle any other unexpected errors
+        error_message = f"An unexpected error occurred: {e}"
         print(error_message)
         return render_template("index.html", error=error_message, current_lang=lang, supported_languages=SUPPORTED_LANGUAGES)
 
-# Route-ka loogu talagalay inuu soo qaado bog kale oo random ah
+# Route to fetch another random page
 @app.route('/random')
 def get_random_page():
-    lang = request.args.get('lang', DEFAULT_LANGUAGE) # Soo qaado luqadda hadda jirta
-    return redirect(url_for('home', lang=lang)) # Dib ugu celi home route-ka oo leh luqadda
+    lang = request.args.get('lang', DEFAULT_LANGUAGE)
+    return redirect(url_for('home', lang=lang))
 
-# Route-ka cusub ee raadinta
+# Search route: Displays search results from Wikipedia
 @app.route('/search')
 def search():
     query = request.args.get('q')
-    lang = request.args.get('lang', DEFAULT_LANGUAGE) # Soo qaado luqadda hadda jirta
+    lang = request.args.get('lang', DEFAULT_LANGUAGE)
     if lang not in SUPPORTED_LANGUAGES:
         lang = DEFAULT_LANGUAGE
 
     if not query:
         return redirect(url_for('home', lang=lang))
 
-    encoded_query = quote(query)
+    encoded_query = quote(query) # URL-encode the query
     search_api_url = get_mediawiki_base_url(lang) + f"?action=query&list=search&srsearch={encoded_query}&format=json&srlimit=10"
 
     try:
@@ -108,14 +110,14 @@ def search():
                                supported_languages=SUPPORTED_LANGUAGES)
 
     except requests.exceptions.RequestException as e:
-        error_message = f"Cilad ka timid Wikipedia API inta la raadinayay: {e}"
+        error_message = f"Error searching Wikipedia API: {e}"
         print(error_message)
         return render_template("index.html", error=error_message, current_lang=lang, supported_languages=SUPPORTED_LANGUAGES)
     except Exception as e:
-        error_message = f"Cilad aan la filayn inta la raadinayay: {e}"
+        error_message = f"An unexpected error occurred during search: {e}"
         print(error_message)
         return render_template("index.html", error=error_message, current_lang=lang, supported_languages=SUPPORTED_LANGUAGES)
 
-
+# Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)

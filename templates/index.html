@@ -2,12 +2,12 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-10"> {# Waxaan ka beddelay col-md-8 una beddelay col-md-10 si uu u helo boos badan #}
+    <div class="col-md-10">
         {% if error %}
         <div class="alert alert-danger" role="alert">
             {{ error }}
         </div>
-        {% elif search_results %} {# Halkan waxaan ku hubinaynaa haddii ay jiraan natiijooyin raadin ah #}
+        {% elif search_results %}
         <h1 class="text-center mb-4">Search Results for "{{ search_query }}"</h1>
         {% if search_results %}
             <div class="list-group">
@@ -16,7 +16,7 @@
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1">{{ article.title }}</h5>
                     </div>
-                    <p class="mb-1 text-muted">{{ article.snippet | striptags | truncate(200) }}</p> {# striptags wuxuu ka saarayaa HTML tags #}
+                    <p class="mb-1 text-muted">{{ article.snippet | striptags | truncate(200) }}</p>
                     <small class="text-muted">Read more on Wikipedia</small>
                 </a>
                 {% endfor %}
@@ -25,7 +25,7 @@
             <p class="text-center">No search results found for "{{ search_query }}".</p>
         {% endif %}
 
-        {% elif random_article %} {# Halkan waxaan ku hubinaynaa haddii uu jiro bog random ah #}
+        {% elif random_article %}
         <div class="card p-4">
             <h1 class="card-title text-center mb-4">{{ random_article.title }}</h1>
             <p class="card-text">{{ random_article.summary }}</p>
@@ -37,12 +37,12 @@
         <div class="card p-4 text-center">
             <h1 class="card-title mb-4">Welcome to Wikipedia Explorer!</h1>
             <p class="card-text">Click "Get Random Page" to start exploring, or use the search bar to find something specific.</p>
-            <a href="{{ url_for('get_random_page') }}" class="btn btn-primary btn-lg mt-3">Get Random Page</a>
+            <a href="{{ url_for('get_random_page', lang=current_lang) }}" class="btn btn-primary btn-lg mt-3">Get Random Page</a> {# Waxaan ku darnay lang=current_lang #}
         </div>
         {% endif %}
 
         <div class="text-center mt-4">
-            <a href="{{ url_for('get_random_page') }}" class="btn btn-secondary btn-lg">Get Another Random Page</a>
+            <a href="{{ url_for('get_random_page', lang=current_lang) }}" class="btn btn-secondary btn-lg">Get Another Random Page</a> {# Waxaan ku darnay lang=current_lang #}
         </div>
     </div>
 </div>

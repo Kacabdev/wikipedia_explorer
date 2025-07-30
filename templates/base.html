@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia Explorer</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #343a40 !important;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding-top: 1rem; /* Waxaan ku darnay padding yar oo dheeraad ah */
+            padding-bottom: 1rem; /* Waxaan ku darnay padding yar oo dheeraad ah */
+        }
+        .footer p {
+            margin-bottom: 0.5rem; /* Waxaan yareynay margin-ka qoraalka caadiga ah */
+        }
+        .footer a {
+            color: #007bff; /* Midabka linkiga */
+            text-decoration: none; /* Ka saar khadka hoose */
+        }
+        .footer a:hover {
+            text-decoration: underline; /* Ku dar khad hoose marka la dul maro */
+        }
+        .card {
+            border-radius: 0.75rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 0.5rem;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">Wikipedia Explorer</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('get_random_page') }}">Get Random Page</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        {% block content %}
+        <!-- Child templates will insert their content here -->
+        {% endblock %}
+    </main>
+
+    <footer class="footer text-center py-3 mt-5">
+        <div class="container">
+            <p>&copy; 2025 Wikipedia Explorer. All rights reserved.</p>
+            <p>Built with <span style="color: #e25555;">&hearts;</span> by <a href="https://github.com/kacabdev" target="_blank" rel="noopener noreferrer">kacabdev</a></p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

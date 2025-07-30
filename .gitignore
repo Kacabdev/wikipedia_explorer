@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python/
+env/
+venv/
+*.env # Aad muhiim u ah! Wuxuu qariyaa faylka .env
+.pytest_cache/
+.coverage
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Flask
+instance/
+.flaskenv
+
+# Operating System specific files
+.DS_Store # macOS
+Thumbs.db # Windows
+ehthumbs.db # Windows
+Desktop.ini # Windows
+
+# IDE specific files
+.vscode/ # Visual Studio Code
+.idea/ # PyCharm / IntelliJ IDEA
+
+# Database files (haddii aad local database isticmaasho)
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# Test / Coverage reports
+.coverage
+htmlcov/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/

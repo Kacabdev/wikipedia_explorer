@@ -1,0 +1,10 @@
+/* Ku dar CSS-kaaga gaarka ah halkan */
+/* tusaale: */
+
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.navbar {
+    background-color: #343a40 !important;
+}

@@ -4,20 +4,21 @@ from flask import Flask, render_template, request, redirect, url_for
 import requests
 from urllib.parse import quote
 
-# Load environment variables from .env file
+# Load environment variables (Vercel handles this in production)
 load_dotenv()
 
+# Initialize Flask app
 app = Flask(__name__)
 
 # Supported languages and default language for Wikipedia API
 SUPPORTED_LANGUAGES = {
     'en': 'English',
     'so': 'Somali',
-    'ar': 'العربية', # Arabic
-    'es': 'Español', # Spanish
-    'fr': 'Français', # French
-    'de': 'Deutsch', # German
-    'it': 'Italiano' # Italian
+    'ar': 'العربية',
+    'es': 'Español',
+    'fr': 'Français',
+    'de': 'Deutsch',
+    'it': 'Italiano'
 }
 DEFAULT_LANGUAGE = 'en'
 
@@ -118,6 +119,6 @@ def search():
         print(error_message)
         return render_template("index.html", error=error_message, current_lang=lang, supported_languages=SUPPORTED_LANGUAGES)
 
-# Run the Flask app
-if __name__ == '__main__':
-    app.run(debug=True)
+# This is the WSGI application entry point for Vercel
+# Vercel expects a callable named 'app'
+# No app.run() here as Vercel handles the server

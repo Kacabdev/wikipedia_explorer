@@ -98,25 +98,26 @@ The main goal of this project is to gain hands-on experience using external APIs
 
 ---
 
-🗂️ Project Structure
-The project is organized to facilitate deployment on platforms like Vercel, which utilizes a serverless function approach for Python applications.
+## 🗂️ Project Structure
 
+```
 wikipedia_explorer/
-├── api/                   # Contains the main Flask application entry point for Vercel
-│   └── index.py           # Your Flask app (formerly app.py)
+├── api/
+│   └──index.py
 ├── venv/                  # Python virtual environment
+├── app.py                 # Main Flask application
 ├── config.py              # Configuration settings
 ├── .env                   # Environment variables (git-ignored)
 ├── .gitignore             # Files and folders to exclude from Git
 ├── requirements.txt       # Python dependencies
-├── static/                # Static assets (CSS, JS, favicon)
+├── static/                # Static files (CSS, JS, favicon)
 │   ├── css/
 │   │   └── style.css
 │   └── favicon.png
-├── templates/             # Jinja2 HTML templates
-│   ├── base.html
-│   └── index.html
-└── vercel.json            # Vercel deployment configuration
+└── templates/             # Jinja2 HTML templates
+    ├── base.html
+    └── index.html
+```
 
 ---
 

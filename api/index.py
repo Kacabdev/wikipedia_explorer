@@ -119,6 +119,8 @@ def search():
         print(error_message)
         return render_template("index.html", error=error_message, current_lang=lang, supported_languages=SUPPORTED_LANGUAGES)
 
+if __name__ == '__main__':
+    app.run()
 # This is the WSGI application entry point for Vercel
 # Vercel expects a callable named 'app'
 # No app.run() here as Vercel handles the server

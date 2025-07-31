@@ -4,13 +4,18 @@ from flask import Flask, render_template, request, redirect, url_for
 import requests
 from urllib.parse import quote
 
-# Load environment variables (Vercel handles this in production)
+# Load environment variables
 load_dotenv()
 
-# Initialize Flask app
-app = Flask(__name__)
+# Define paths for templates and static files for Vercel deployment
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_FOLDER = os.path.join(BASE_DIR, '..', 'templates')
+STATIC_FOLDER = os.path.join(BASE_DIR, '..', 'static')
 
-# Supported languages and default language for Wikipedia API
+# Initialize Flask app with explicit template and static folders
+app = Flask(__name__, template_folder=TEMPLATE_FOLDER, static_folder=STATIC_FOLDER)
+
+# Supported Wikipedia languages and default
 SUPPORTED_LANGUAGES = {
     'en': 'English',
     'so': 'Somali',
@@ -22,13 +27,13 @@ SUPPORTED_LANGUAGES = {
 }
 DEFAULT_LANGUAGE = 'en'
 
-# Helper function to construct Wikipedia RESTBase API URL for a given language
+# Helper to get Wikipedia RESTBase API URL for a given language
 def get_wikipedia_base_url(lang_code):
     if lang_code not in SUPPORTED_LANGUAGES:
         lang_code = DEFAULT_LANGUAGE
     return f"https://{lang_code}.wikipedia.org/api/rest_v1/page/"
 
-# Helper function to construct Wikipedia MediaWiki API URL for a given language
+# Helper to get Wikipedia MediaWiki API URL for a given language
 def get_mediawiki_base_url(lang_code):
     if lang_code not in SUPPORTED_LANGUAGES:
         lang_code = DEFAULT_LANGUAGE
@@ -38,7 +43,6 @@ def get_mediawiki_base_url(lang_code):
 # Home route: Displays a random Wikipedia page
 @app.route('/')
 def home():
-    # Get language from URL parameters, default to English
     lang = request.args.get('lang', DEFAULT_LANGUAGE)
     if lang not in SUPPORTED_LANGUAGES:
         lang = DEFAULT_LANGUAGE
@@ -47,7 +51,7 @@ def home():
 
     try:
         response = requests.get(wikipedia_api_url)
-        response.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
+        response.raise_for_status()
         article_data = response.json()
 
         title = article_data.get('title', 'No Title Found')
@@ -60,12 +64,10 @@ def home():
                                supported_languages=SUPPORTED_LANGUAGES)
 
     except requests.exceptions.RequestException as e:
-        # Handle API connection/response errors
         error_message = f"Error fetching from Wikipedia API: {e}"
         print(error_message)
         return render_template("index.html", error=error_message, current_lang=lang, supported_languages=SUPPORTED_LANGUAGES)
     except Exception as e:
-        # Handle any other unexpected errors
         error_message = f"An unexpected error occurred: {e}"
         print(error_message)
         return render_template("index.html", error=error_message, current_lang=lang, supported_languages=SUPPORTED_LANGUAGES)
@@ -87,7 +89,7 @@ def search():
     if not query:
         return redirect(url_for('home', lang=lang))
 
-    encoded_query = quote(query) # URL-encode the query
+    encoded_query = quote(query)
     search_api_url = get_mediawiki_base_url(lang) + f"?action=query&list=search&srsearch={encoded_query}&format=json&srlimit=10"
 
     try:
@@ -119,8 +121,8 @@ def search():
         print(error_message)
         return render_template("index.html", error=error_message, current_lang=lang, supported_languages=SUPPORTED_LANGUAGES)
 
-if __name__ == '__main__':
-    app.run()
-# This is the WSGI application entry point for Vercel
+# WSGI application entry point for Vercel
 # Vercel expects a callable named 'app'
 # No app.run() here as Vercel handles the server
+if __name__ == '__main__':
+    app.run()

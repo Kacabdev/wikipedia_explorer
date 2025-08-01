@@ -124,5 +124,6 @@ def search():
 # WSGI application entry point for Vercel
 # Vercel expects a callable named 'app'
 # No app.run() here as Vercel handles the server
+# i tried and vercel did'nt handle the server so this below line of code is needed
 if __name__ == '__main__':
     app.run()

@@ -10,3 +10,28 @@ body {
     color: #fff !important;
     
 }
+
+/* Custom CSS to fix the footer position and make it responsive */
+
+/* * We set the body to a flex container. 
+ * This allows its children (nav, main, footer) to be arranged vertically.
+ */
+body {
+    display: flex;
+    flex-direction: column;
+    /* This ensures the body takes up at least the full height of the viewport */
+    min-height: 100vh;
+}
+
+/* * The main content container is set to "grow".
+ * This makes it expand and fill any available space,
+ * pushing the footer down to the bottom.
+ */
+main {
+    flex-grow: 1;
+}
+
+/* Add a margin to the top of the footer to create some space */
+.footer {
+    margin-top: 1.5rem; /* Adjust this value as needed */
+}
